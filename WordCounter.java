@@ -1,0 +1,54 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+public class WordCounter {
+    public static void main(String[] args) {
+        System.out.println("Enter '1' to input text or '2' to provide a file:");
+        int choice = Integer.parseInt(System.console().readLine());
+
+        String inputText = "";
+        if (choice == 1) {
+            System.out.println("Enter the text:");
+            inputText = System.console().readLine();
+        } else if (choice == 2) {
+            System.out.println("Enter the file path:");
+            String filePath = System.console().readLine();
+            try {
+                inputText = readFile(filePath);
+            } catch (IOException e) {
+                System.err.println("Error reading the file: " + e.getMessage());
+                return;
+            }
+        } else {
+            System.out.println("Invalid choice.");
+            return;
+        }
+
+        String[] words = inputText.split("[\\s\\p{Punct}]+");
+        int wordCount = 0;
+
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                wordCount++;
+            }
+        }
+
+        System.out.println("Total word count: " + wordCount);
+    }
+
+    private static String readFile(String filePath) throws IOException {
+        StringBuilder content = new StringBuilder();
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            content.append(line).append("\n");
+        }
+        reader.close();
+        return content.toString();
+    }
+}
